@@ -41,6 +41,40 @@ msyhbd.ttc
 
 上传完毕后增加执行权限，运行脚本
 
+#### 1.5.脚本运行过程
+
+```bash
+[root@localhost ~]# ./install_zabbix_server7 
+为RHEL\CentOS\OL\Rocky Linux关闭SElinux...
+SELinux配置文件已更改为禁用状态
+SELinux的永久更改需要重启系统才能生效
+为RHEL\CentOS\OL\Rocky Linux配置防火墙...
+success
+success
+success
+success
+配置防火墙完成
+安装MariaDB源...
+安装并初始化MariaDB数据库...
+Created symlink /etc/systemd/system/multi-user.target.wants/mariadb.service → /usr/lib/systemd/system/mariadb.service.
+MariaDB数据库准备完成
+针对CentOS8和RHEL8系统使用remi源安装PHP8...
+PHP 8.0 安装和配置完成
+安装zabbix服务端...
+YUM仓库准备完成
+配置zabbix服务端...
+Created symlink /etc/systemd/system/multi-user.target.wants/zabbix-server.service → /usr/lib/systemd/system/zabbix-server.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/zabbix-agent.service → /usr/lib/systemd/system/zabbix-agent.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /usr/lib/systemd/system/httpd.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/php-fpm.service → /usr/lib/systemd/system/php-fpm.service.
+
+ZABBIX-7.0安装完成!
+-------------------------------------------------------------------
+请访问: http://192.168.56.58/zabbix  默认用户名密码:  Admin / zabbix 数据库密码 123456
+```
+
+
+
 #### 1.4.运行脚本后
 
 6.0LTS和5.0LTS版本，脚本执行完毕后运行以下参数，无需重启服务和操作系统以及数据库，7.0LTS版本无需设置，脚本会自动修改
@@ -55,7 +89,7 @@ mysql> quit;
 #对于 Zabbix 6.0.11 及更新版本，需要在导入模式期间创建确定性触发器。 在 MySQL 和 MariaDB 上，如果启用了二进制日志记录并且没有超级用户权限同时未在MySQL配置文件中配置 log_bin_trust_function_creators = 1 ，则需要设置 GLOBAL log_bin_trust_function_creators = 1。
 ```
 
-### 2.分离安装部署 
+### 2.分离安装部署
 
 #### 2.1.LTS5.0版本
 
