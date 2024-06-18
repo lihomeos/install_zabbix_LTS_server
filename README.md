@@ -55,7 +55,7 @@ mysql> quit;
 #对于 Zabbix 6.0.11 及更新版本，需要在导入模式期间创建确定性触发器。 在 MySQL 和 MariaDB 上，如果启用了二进制日志记录并且没有超级用户权限同时未在MySQL配置文件中配置 log_bin_trust_function_creators = 1 ，则需要设置 GLOBAL log_bin_trust_function_creators = 1。
 ```
 
-### 2.分离安装部署
+### 2.分离安装部署 
 
 #### 2.1.LTS5.0版本
 
