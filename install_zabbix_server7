@@ -3,7 +3,7 @@
 #=========================================================================#
 # Author:            li lei
 # QQ:                45646231
-# Date:              2024-06-12
+# Date:              2024-08-03
 # FileName:          install_zabbix_server7
 # E-Mail:            lilei@xacdyun.com
 # Version:           3.0.0
@@ -78,7 +78,7 @@ function check_internet_connectivity() {
 }
 
 function disabled_selinux() {
-    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" ]; then
+    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" -o $ID = "rhel" ]; then
         color "green" "为RHEL\CentOS\OL\Rocky Linux关闭SElinux..."
         if sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config; then
             color "green" "SELinux配置文件已更改为禁用状态" 0
@@ -92,7 +92,7 @@ function disabled_selinux() {
 }
 
 function config_firewalld_on_centos_or_rocky() {
-    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" ]; then
+    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" -o $ID = "rhel" ]; then
         color "green" "为RHEL\CentOS\OL\Rocky Linux配置防火墙..."
         # 如果防火墙正在运行,配置防火墙
         if systemctl status firewalld | grep -q "active (running)"; then
@@ -132,7 +132,7 @@ function install_mariadb_release() {
 function install_mariadb() {
     color "green" "安装并初始化MariaDB数据库..."
     [ $MYSQL_HOST != "localhost" ] && return
-    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" ]; then
+    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" -o $ID = "rhel" ]; then
         if [ ${YUM_VERSION_ID} == "8" -o ${YUM_VERSION_ID} == "9" ]; then
             dnf -y install MariaDB-server MariaDB-client MariaDB-backup MariaDB-devel >>$zabbixinstalllog 2>&1
             systemctl enable mariadb --now
@@ -171,10 +171,10 @@ function change_PHP7_to_PHP8() {
             mv /root/CentOS-Base.repo /etc/yum.repos.d/
             dnf -y module enable php:remi-8.0 >>$zabbixinstalllog 2>&1
         else
-            color "red" "不支持的CentOS版本" 1
+            color "red" "不支持的CentOS or RHEL版本" 1
             return 1
         fi
-    elif [ $ID = "rocky" -o $ID = "ol" ]; then
+    elif [ $ID = "rocky" -o $ID = "ol" -o $ID = "rhel" ]; then
         if [ ${YUM_VERSION_ID} = "8" ]; then
             dnf -y install epel-release >>$zabbixinstalllog 2>&1
             dnf -y module switch-to php:8.0 >>$zabbixinstalllog 2>&1
@@ -193,7 +193,7 @@ function change_PHP7_to_PHP8() {
 
 function install_zabbix() {
     color "green" "安装zabbix服务端..."
-    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" ]; then
+    if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" -o $ID = "rhel" ]; then
         if [ ${YUM_VERSION_ID} == "8" ]; then
             rpm -Uvh https://${URL}/zabbix/${ZABBIX_VER}/rhel/${YUM_VERSION_ID}/x86_64/zabbix-release-${ZABBIX_VER}-1.el${YUM_VERSION_ID}.noarch.rpm >>$zabbixinstalllog 2>&1
         elif [ ${YUM_VERSION_ID} == "9" ]; then
@@ -234,7 +234,7 @@ function config_mysql_zabbix() {
         zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mariadb -uzabbix -p$MYSQL_ZABBIX_PASS -h$MYSQL_HOST zabbix
         sed -i -e "/.*DBPassword=.*/c DBPassword=$MYSQL_ZABBIX_PASS" -e "/.*DBHost=.*/c DBHost=$MYSQL_HOST" /etc/zabbix/zabbix_server.conf
         echo "set global log_bin_trust_function_creators = 0;" | mariadb -uroot -p$MYSQL_ROOT_PASS
-        if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" ]; then
+        if [ $ID = "centos" -o $ID = "rocky" -o $ID = "ol" -o $ID = "rhel" ]; then
             sed -i "/.*upload_max_filesize.*/c php_value[upload_max_filesize] = 20M" /etc/php-fpm.d/zabbix.conf
             sed -i '$a\php_value[date.timezone] = Asia/Shanghai' /etc/php-fpm.d/zabbix.conf
             systemctl enable --now zabbix-server zabbix-agent httpd php-fpm
