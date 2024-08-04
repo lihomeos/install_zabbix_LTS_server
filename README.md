@@ -7,6 +7,7 @@
 ```bash
 zabbix7.0 LTS 服务端支持：
 CentOS8-Stream系列 CentOS9-Stream系列 CentOS8.0-8.5系列 OracleLinux8系列 OracleLinux9系列 RedhatLinux8系列 RedhatLinux9系列 rocky Linux8系列 rocky Linux9系列 ubuntu2204系列 ubuntu2404系列
+#注意：因红帽部分源被移除，请使用RedhatLinux8.6或者以上的系统
 
 zabbix6.0 TTS 服务端支持
 CentOS8-Stream系列 CentOS9-Stream系列 CentOS8.0-8.5系列 OracleLinux8系列 OracleLinux9系列 RedhatLinux8系列 RedhatLinux9系列 rocky Linux8系列 rocky Linux9系列 ubuntu2204系列 ubuntu2004系列
